@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rsna-knee"
+version = "0.1.0"
+description = "RSNA knee abnormality detection: DICOM series joined to report-derived labels"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "pydicom>=2.4",
+]
+
+[project.optional-dependencies]
+# The index caches to parquet; csv works without this, just slower and larger.
+parquet = ["pyarrow>=14"]
+dev = ["pytest>=7", "pyarrow>=14"]
+
+[project.scripts]
+rsna-knee = "rsna_knee.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["rsna_knee*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+# so `pytest` works in a fresh clone, before `pip install -e .`
+pythonpath = ["src"]
+filterwarnings = [
+    # pydicom is loud about the short, fake UIDs the test fixtures use.
+    "ignore:Invalid value for VR UI:UserWarning",
+]
