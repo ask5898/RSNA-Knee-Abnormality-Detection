@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rsna-knee"
+version = "1.0.0"
+description = "RSNA Knee Abnormality Detection: report-derived labels, ConvNeXt (frozen or LoRA-fine-tuned) and a study-level attention head"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "torch>=2.1",
+    "timm>=1.0",
+    "pydicom>=2.4",
+    "opencv-python-headless",
+]
+
+[project.optional-dependencies]
+download = ["kaggle>=2.0"]
+llm = ["transformers>=4.51", "accelerate"]
+dev = ["pytest", "pyflakes", "kaggle>=2.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: end-to-end comparison with the notebook (about 2 minutes)"]
